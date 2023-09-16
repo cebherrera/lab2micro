@@ -1,7 +1,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-volatile int boton = 0; // Variable global, debe ser volatile
+volatile int counter = 0; // Variable global, debe ser volatile
 
 int main(void)
 {
@@ -9,13 +9,12 @@ int main(void)
 
   TCCR0B |= (1 << CS00 ); TCCR0B |= (1 << CS02 ) ; // CLK = CLK_IO[1 MHz]/1024 = 976.5 HZ -> 1.02*10-3 s
 
-  TCCR0A |= (1 << WGM01 ) ; // Modo CTC (OCOA?)
+  TCCR0A |= (1 << WGM01 ) ; // Modo CTC 
 
   //TCCR0A |= (1 << COM0A0 ) ; // Toggle OCOA on Compare Match (PIN B2)
+  //DDRB = 0x04; // Se establece el PIN B2 como Salida
 
   OCR0A = 0xF0; // Valor que se compara con TCNT0
-
-  //DDRB = 0x04; // Se establece el PIN B2 como Salida
 
   DDRB = 0x08; // Se establece el PIN B3 como Salida
 
@@ -27,25 +26,25 @@ int main(void)
   while (1) {
     switch (estado_LED){
     case 1:
-        switch(boton){
-          case 1:
+        switch(counter){
+          case 100:
             PORTB = 0x00; // PIN B3 como Sink (Se apaga LED)
             estado_LED = 0;
-            boton = 0;
+            counter = 0;
             break;
-          case 0:
+          default:
             // Led queda encendido
             break;
         }
         break;
     case 0:
-        switch(boton){
-          case 1:
+        switch(counter){
+          case 100:
             PORTB = 0x08; // PIN B3 como Source (Se enciende LED)
             estado_LED = 1;
-            boton = 0;
+            counter = 0;
             break;
-          case 0:
+          default:
             // Led queda apagado
             break;
         }
@@ -57,5 +56,5 @@ int main(void)
   // Logica Secuencial (Interrupciones)
   ISR ( TIMER0_COMPA_vect )
 {
-  boton = 1; 
+  counter = counter + 1; 
 }
