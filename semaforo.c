@@ -7,7 +7,7 @@ int main(void)
 {
   sei(); // Se establece el bit I - Global Interrupt Enable
 
-  TCCR0B |= (1 << CS00 ); TCCR0B |= (1 << CS02 ) ; // CLK = CLK_IO[1 MHz]/1024 = 976.5 HZ -> 1.02*10-3 s
+  TCCR0B |= (1 << CS00 ); TCCR0B |= (1 << CS02 ) ; // CLK = CLK_IO[8 MHz]/1024 = 7812.5 HZ -> 1.28*10-4 s
 
   TCCR0A |= (1 << WGM01 ) ; // Modo CTC 
 
