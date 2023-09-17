@@ -1,10 +1,34 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-volatile int counter10 = 0; // Variable global, debe ser volatile
+// Variables Globales
+volatile int counter = 0; 
+volatile int boton = 0; 
 
-volatile int boton = 0; // Variable global, debe ser volatile
+// Estados de ME
+typedef enum {
+    estado0 = 0,
+    estado1 = 1,
+    estado2 = 2,
+    estado3 = 3,
+    estado4 = 4,
+    estado5 = 5
+} State;
 
+// Estado de LED
+typedef enum {
+    Apagado = 0,
+    Encendido = 1
+} LEDState;
+
+// Estados de Contador
+typedef enum {
+    s10 = 652,
+    s3 = 196,
+    s1 = 33
+} CounterState;
+
+// Funcion Principal
 int main(void)
 {
   sei(); // Se establece el bit I - Global Interrupt Enable
@@ -35,7 +59,7 @@ int main(void)
   while (1) {
     switch (estado){
     case 0:
-      switch (counter10){
+      switch (counter){
         case 326:
           // Pasaron los 10s
           estado = 1
@@ -69,7 +93,7 @@ int main(void)
   // Logica Secuencial (Interrupciones)
   ISR ( TIMER0_COMPA_vect )
 {
-  counter10 = counter10 + 1; 
+  counter = counter + 1; 
 }
 
   ISR ( INT0_vect )
