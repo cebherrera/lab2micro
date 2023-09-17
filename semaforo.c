@@ -7,6 +7,8 @@ int main(void)
 {
   sei(); // Se establece el bit I - Global Interrupt Enable
 
+  // Configuracion de Registros
+
   TCCR0B |= (1 << CS00 ) | (1 << CS02 ) ; // CLK = CLK_IO[8 MHz]/1024 = 7812.5 HZ -> 1.28*10-4 s (Periodo del Reloj)
 
   TCCR0A |= (1 << WGM01 ) ; // Modo CTC 
@@ -29,7 +31,7 @@ int main(void)
     case 1:
         switch(counter){
           case 100:
-            PORTB = 0x00; // PIN B3 como Sink (Se apaga LED)
+            PORTB &= ~(1 << PORTB0); // PIN B3 como Sink (Se apaga LED)
             estado_LED = 0;
             counter = 0;
             break;
@@ -41,7 +43,7 @@ int main(void)
     case 0:
         switch(counter){
           case 100:
-            PORTB = 0x08; // PIN B3 como Source (Se enciende LED)
+            PORTB = (1 << PORTB0 ); // PIN B3 como Source (Se enciende LED)
             estado_LED = 1;
             counter = 0;
             break;
@@ -53,8 +55,6 @@ int main(void)
     }
   }
 }
-
-
 
   // Logica Secuencial (Interrupciones)
   ISR ( TIMER0_COMPA_vect )
