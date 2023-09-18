@@ -80,6 +80,7 @@ int main(void)
             PINB |=  (1 << PINB1 ); // B1 (LDPV) toggle
             PORTB |=  (1 << PORTB3 ); // B3 (LDPD) Encendido 
             counter = 0;
+            boton = 0;
             estado = botonpresionado;
             break;
         case no_presionado:
@@ -166,6 +167,8 @@ int main(void)
         case s1:
           PORTB |=  (1 << PORTB1 ); // B1 (LDPV) Encendido
           PORTB &= ~(1 << PORTB0 ); // B0 (LDVD) Apagado
+          counter = 0;
+          estado = espera10s;
           break;
         
         default:
